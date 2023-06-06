@@ -32,13 +32,23 @@ pipeline {
         }
     }
     post {
-        always {
+        always{
             junit 'results/*_result.xml'
+            
+            emailext body: 'Test Message',
+                    subject: 'Test Subject',
+                    to: 'raf4ga@gmail.com'
+            echo "Email Notification!"
+            echo "${currentBuild.currentResult}: Job ${env.JOB_NAME}\nBuild Number: ${env.BUILD_NUMBER}\nMore Info can be found here: ${env.BUILD_URL}"
+            
             cleanWs()
-            emailext subject: 'Resultado de la construcción',
-                      body: 'Hola,\n\nLa construcción ha finalizado.',
-                      to: 'quesadaao@hotmail.com',
-                      from: 'quesadaao@hotmail.com'
+        }
+        failure {
+            emailext body: 'Test Message',
+                    subject: 'Test Subject',
+                    to: 'raf4ga@gmail.com'
+            echo "Email Notification!"
+            echo "${currentBuild.currentResult}: Job ${env.JOB_NAME}\nBuild Number: ${env.BUILD_NUMBER}\nMore Info can be found here: ${env.BUILD_URL}"
         }
     }
 }
